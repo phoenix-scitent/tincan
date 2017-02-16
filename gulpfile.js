@@ -25,12 +25,12 @@ browserification.on('log', util.log);
 
 gulp.task('bundle', [], function(){
   return browserification.bundle()
-      .on('error', function(err){ console.log(err.message); this.emit('end'); })
-      .pipe(plumber())
-      .pipe(source('watcher.js'))
-      .pipe(buffer())
-      .pipe(size())
-      .pipe(gulp.dest(destpath));
+    .on('error', function(err){ console.log(err.message); this.emit('end'); })
+    .pipe(plumber())
+    .pipe(source('tincan.js'))
+    .pipe(buffer())
+    .pipe(size())
+    .pipe(gulp.dest(destpath));
 });
 
 gulp.task('watch', ['bundle'], function(){
