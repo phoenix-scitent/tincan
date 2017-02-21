@@ -395,7 +395,7 @@ export default function(CONFIG, isLocal, authUrl){
 
               //start new attempt
               statements.push(attemptedStatement);
-              bookmarkingData.save();
+              bookmarkingData.save(function(err, xhr){});
             }
           });
 
@@ -405,16 +405,15 @@ export default function(CONFIG, isLocal, authUrl){
           statements.push(attemptedStatement);
         }
 
-        tincan.sendStatements(statements, function (err, xhr) {
-        });
+        tincan.sendStatements(statements, function (err, xhr) {});
         //goToPage();
 
       });
     };
 
     TINCAN['storeAttemptState'] = function (state) {
-      bookmarkingData.setAttemptState(state)
-      bookmarkingData.save();
+      bookmarkingData.setAttemptState(state);
+      bookmarkingData.save(function(err, xhr){});
     };
 
     TINCAN['doComplete'] = function () {
@@ -443,8 +442,7 @@ export default function(CONFIG, isLocal, authUrl){
 
       statements.push(completedStatement);
 
-      tincan.sendStatements(statements, function (err, xhr) {
-      });
+      tincan.sendStatements(statements, function (err, xhr) {});
     };
 
     TINCAN['doTracking'] = function (type, info) {
@@ -677,7 +675,7 @@ export default function(CONFIG, isLocal, authUrl){
 
       bookmarkingData.setQuestionsAnswered(questionTitle, questionState);
 
-      bookmarkingData.save();
+      bookmarkingData.save(function(err, xhr){});
 
       statements.push(answeredStatement);
 
@@ -878,7 +876,8 @@ export default function(CONFIG, isLocal, authUrl){
 
   } else {
 
-    window.onload = tincanImplement;
+    tincanImplement();
+    //window.onload = tincanImplement;
 
   }
 
