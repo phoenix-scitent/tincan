@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { bus } from 'partybus';
 
 // SET global via hucklebuck \\
 
@@ -46,17 +47,17 @@ tincan(config, isLocal);
 // EXAMPLES:
 
 $(document).on('click', '#start', function(){
-  $(document).trigger('tincan::start');
+  bus.trigger('tincan::start');
 });
 
 $(document).on('click', '#complete', function(){
-  $(document).trigger('tincan::complete');
+  bus.trigger('tincan::complete');
 });
 
 $(document).on('click', '#access-section', function(){
-  $(document).trigger('tincan::access_section', [ config.activity_name, config.activity_name, 'access_section' ]);
+  bus.trigger('tincan::access_section', [ config.activity_name, config.activity_name, 'access_section' ]);
 });
 
-$(document).on('click', '#leave-section', function(){
-  $(document).trigger('tincan::leave_section', [ config.activity_name, config.activity_name, 'leave_section' ]);
+bus.on('click', '#leave-section', function(){
+  bus.trigger('tincan::leave_section', [ config.activity_name, config.activity_name, 'leave_section' ]);
 });

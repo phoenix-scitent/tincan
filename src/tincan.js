@@ -1,5 +1,6 @@
-import $ from 'jquery';
+import $ from 'jquery'; // TODO: need to get rid of this after fixing resume progress
 import { timer, slugify } from './helpers';
+import { bus } from 'partybus';
 import TinCan from 'tincanjs';
 
 export default function(CONFIG, isLocal, authUrl){
@@ -39,15 +40,15 @@ export default function(CONFIG, isLocal, authUrl){
     // activity //
     //////////////
 
-    $(document).on('tincan::start', function (event) {
+    bus.on('tincan::start', function (event) {
       TINCAN.doStart();
     });
 
-    $(document).on('tincan::storeAttemptState', function (event, completionState) {
+    bus.on('tincan::storeAttemptState', function (event, completionState) {
       TINCAN.storeAttemptState(completionState);
     });
 
-    $(document).on('tincan::complete', function (event) {
+    bus.on('tincan::complete', function (event) {
       TINCAN.doComplete();
     });
 
@@ -55,19 +56,19 @@ export default function(CONFIG, isLocal, authUrl){
     // add-ons //
     /////////////
 
-    $(document).on('tincan::polled', function (event, identifier, type, question, response) {
+    bus.on('tincan::polled', function (event, identifier, type, question, response) {
       TINCAN.doPolled(identifier, type, question, response);
     });
 
-    $(document).on('tincan::getPollData', function (event, identifier, callback) {
+    bus.on('tincan::getPollData', function (event, identifier, callback) {
       TINCAN.getPollData(identifier, callback);
     });
 
-    $(document).on('tincan::actionPlanUpdate', function (event, identifier, responses) {
+    bus.on('tincan::actionPlanUpdate', function (event, identifier, responses) {
       TINCAN.doActionPlan(identifier, responses)
     });
 
-    $(document).on('tincan::getActionPlanData', function (event, identifier, callback) {
+    bus.on('tincan::getActionPlanData', function (event, identifier, callback) {
       TINCAN.getActionPlanData(identifier, callback)
     });
 
@@ -75,31 +76,31 @@ export default function(CONFIG, isLocal, authUrl){
     // tracking //
     //////////////
 
-    $(document).on('tincan::access_course', function (event, courseName, name) {
+    bus.on('tincan::access_course', function (event, courseName, name) {
       var start = timer.start(slugify(name));
       TINCAN.doTracking('access_course', {courseName: courseName, name: name, start: start});
       //console.log('access_course', name, start);
     });
 
-    $(document).on('tincan::leave_course', function (event, courseName, name) {
+    bus.on('tincan::leave_course', function (event, courseName, name) {
       var end = timer.stop(slugify(name));
       TINCAN.doTracking('leave_course', {courseName: courseName, name: name, end: end});
       //console.log('leave_course', name, end);
     });
 
-    $(document).on('tincan::access_section', function (event, courseName, name, type) {
+    bus.on('tincan::access_section', function (event, courseName, name, type) {
       var start = timer.start(slugify(name));
       TINCAN.doTracking('access_section', {courseName: courseName, name: name, type: type, start: start});
       //console.log('access_section', name, start);
     });
 
-    $(document).on('tincan::leave_section', function (event, courseName, name, type) {
+    bus.on('tincan::leave_section', function (event, courseName, name, type) {
       var end = timer.stop(slugify(name));
       TINCAN.doTracking('leave_section', {courseName: courseName, name: name, type: type, end: end});
       //console.log('leave_section', name, end);
     });
 
-    $(document).on('tincan::start_video', function (event, courseName, src, currentTime, section) {
+    bus.on('tincan::start_video', function (event, courseName, src, currentTime, section) {
       var start = timer.start(slugify(src));
       TINCAN.doTracking('start_video', {
         courseName: courseName,
@@ -111,7 +112,7 @@ export default function(CONFIG, isLocal, authUrl){
       //console.log('start_video', src, currentTime, start);
     });
 
-    $(document).on('tincan::stop_video', function (event, courseName, src, currentTime, section) {
+    bus.on('tincan::stop_video', function (event, courseName, src, currentTime, section) {
       var end = timer.stop(slugify(src));
       TINCAN.doTracking('end_video', {
         courseName: courseName,
@@ -123,7 +124,7 @@ export default function(CONFIG, isLocal, authUrl){
       //console.log('end_video', src, currentTime, end);
     });
 
-    $(document).on('tincan::access_help', function (event, courseName) {
+    bus.on('tincan::access_help', function (event, courseName) {
       TINCAN.doTracking('access_help', {courseName: courseName});
       //console.log('access_help');
     });
@@ -861,7 +862,7 @@ export default function(CONFIG, isLocal, authUrl){
     // ready! //
     ///////////
 
-    $(document).trigger('tincan::ready');
+    bus.trigger('tincan::ready');
 
   };
 
@@ -873,7 +874,7 @@ export default function(CONFIG, isLocal, authUrl){
 
     console.log('☂ runninglocallynotincanstatement ☂');
 
-    $(document).trigger('tincan::ready');
+    bus.trigger('tincan::ready');
 
   } else {
 
