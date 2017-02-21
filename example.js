@@ -47,17 +47,17 @@ tincan(config, isLocal);
 // EXAMPLES:
 
 $(document).on('click', '#start', function(){
-  bus.trigger('tincan::start');
+  bus.emit('tincan::start');
 });
 
 $(document).on('click', '#complete', function(){
-  bus.trigger('tincan::complete');
+  bus.emit('tincan::complete');
 });
 
 $(document).on('click', '#access-section', function(){
-  bus.trigger('tincan::access_section', [ config.activity_name, config.activity_name, 'access_section' ]);
+  bus.emit('tincan::access_section', { courseName: config.activity_name, name: config.activity_name, type: 'access_section' });
 });
 
 bus.on('click', '#leave-section', function(){
-  bus.trigger('tincan::leave_section', [ config.activity_name, config.activity_name, 'leave_section' ]);
+  bus.emit('tincan::leave_section', { courseName: config.activity_name, name: config.activity_name, type: 'leave_section' });
 });

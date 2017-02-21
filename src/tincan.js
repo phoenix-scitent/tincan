@@ -40,15 +40,15 @@ export default function(CONFIG, isLocal, authUrl){
     // activity //
     //////////////
 
-    bus.on('tincan::start', function (event) {
+    bus.on('tincan::start', function () {
       TINCAN.doStart();
     });
 
-    bus.on('tincan::storeAttemptState', function (event, completionState) {
+    bus.on('tincan::storeAttemptState', function ({ completionState }) {
       TINCAN.storeAttemptState(completionState);
     });
 
-    bus.on('tincan::complete', function (event) {
+    bus.on('tincan::complete', function () {
       TINCAN.doComplete();
     });
 
@@ -56,19 +56,19 @@ export default function(CONFIG, isLocal, authUrl){
     // add-ons //
     /////////////
 
-    bus.on('tincan::polled', function (event, identifier, type, question, response) {
+    bus.on('tincan::polled', function ({ identifier, type, question, response }) {
       TINCAN.doPolled(identifier, type, question, response);
     });
 
-    bus.on('tincan::getPollData', function (event, identifier, callback) {
+    bus.on('tincan::getPollData', function ({ identifier, callback }) {
       TINCAN.getPollData(identifier, callback);
     });
 
-    bus.on('tincan::actionPlanUpdate', function (event, identifier, responses) {
+    bus.on('tincan::actionPlanUpdate', function ({ identifier, responses }) {
       TINCAN.doActionPlan(identifier, responses)
     });
 
-    bus.on('tincan::getActionPlanData', function (event, identifier, callback) {
+    bus.on('tincan::getActionPlanData', function ({ identifier, callback }) {
       TINCAN.getActionPlanData(identifier, callback)
     });
 
@@ -76,31 +76,31 @@ export default function(CONFIG, isLocal, authUrl){
     // tracking //
     //////////////
 
-    bus.on('tincan::access_course', function (event, courseName, name) {
+    bus.on('tincan::access_course', function ({ courseName, name }) {
       var start = timer.start(slugify(name));
       TINCAN.doTracking('access_course', {courseName: courseName, name: name, start: start});
       //console.log('access_course', name, start);
     });
 
-    bus.on('tincan::leave_course', function (event, courseName, name) {
+    bus.on('tincan::leave_course', function ({ courseName, name }) {
       var end = timer.stop(slugify(name));
       TINCAN.doTracking('leave_course', {courseName: courseName, name: name, end: end});
       //console.log('leave_course', name, end);
     });
 
-    bus.on('tincan::access_section', function (event, courseName, name, type) {
+    bus.on('tincan::access_section', function ({ courseName, name, type }) {
       var start = timer.start(slugify(name));
       TINCAN.doTracking('access_section', {courseName: courseName, name: name, type: type, start: start});
       //console.log('access_section', name, start);
     });
 
-    bus.on('tincan::leave_section', function (event, courseName, name, type) {
+    bus.on('tincan::leave_section', function ({ courseName, name, type }) {
       var end = timer.stop(slugify(name));
       TINCAN.doTracking('leave_section', {courseName: courseName, name: name, type: type, end: end});
       //console.log('leave_section', name, end);
     });
 
-    bus.on('tincan::start_video', function (event, courseName, src, currentTime, section) {
+    bus.on('tincan::start_video', function ({ courseName, src, currentTime, section }) {
       var start = timer.start(slugify(src));
       TINCAN.doTracking('start_video', {
         courseName: courseName,
@@ -112,7 +112,7 @@ export default function(CONFIG, isLocal, authUrl){
       //console.log('start_video', src, currentTime, start);
     });
 
-    bus.on('tincan::stop_video', function (event, courseName, src, currentTime, section) {
+    bus.on('tincan::stop_video', function ({ courseName, src, currentTime, section }) {
       var end = timer.stop(slugify(src));
       TINCAN.doTracking('end_video', {
         courseName: courseName,
@@ -124,7 +124,7 @@ export default function(CONFIG, isLocal, authUrl){
       //console.log('end_video', src, currentTime, end);
     });
 
-    bus.on('tincan::access_help', function (event, courseName) {
+    bus.on('tincan::access_help', function ({ courseName }) {
       TINCAN.doTracking('access_help', {courseName: courseName});
       //console.log('access_help');
     });
