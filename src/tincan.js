@@ -862,7 +862,7 @@ export default function(CONFIG, isLocal, authUrl){
     // ready! //
     ///////////
 
-    bus.trigger('tincan::ready');
+    bus.emit('tincan::ready');
 
   };
 
@@ -874,7 +874,7 @@ export default function(CONFIG, isLocal, authUrl){
 
     console.log('☂ runninglocallynotincanstatement ☂');
 
-    bus.trigger('tincan::ready');
+    bus.emit('tincan::ready');
 
   } else {
 
