@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import { bus } from 'partybus';
 
 // SET global via hucklebuck \\
 
@@ -28,57 +29,39 @@ var isLocal = (window.location.protocol === 'file:') || (window.location.hostnam
 
 // call `tincan` function via course (src/js/index.js), but inport via hucklebuck (src/hucklebuck)
 
-import tincanInit from './src/tincan';
+import tincan from './src/tincan';
 
 ///////////////////
 // test real use //
 ///////////////////
 
-//var tincan = tincanInit(config, isLocal);
+//tincan(config, isLocal);
 
 //////////////////////////////
 // test demo/production use //
 //////////////////////////////
 
 var authUrl = 'https://17515-presscdn-0-77-pagely.netdna-ssl.com/wp-content/uploads/grassblade/6896-course-3/index.html?actor=%7B%22mbox%22%3A%22mailto%3Atjohnson%40scitent.us%22%2C%22name%22%3A%22Tim%20Johnson%22%2C%22objectType%22%3A%22Agent%22%7D&auth=Basic%20MzctMzRiOTNjYWI2MTc0MmUwOmRjOThhYjFjN2U3NDRmZTE4NGRkYzU4N2U%3D&endpoint=https%3A%2F%2Flrs.scitent.us%2FxAPI%2F&registration=&activity_id=http%3A%2F%2Fcareerdevelopment.aaas.org%2Fcourse3';
-var tincan = tincanInit(config, false, authUrl);
+tincan(config, false, authUrl);
 
 // EXAMPLES:
 
 $(document).on('click', '#start', function(){
-  tincan.start().tap(console.log).drain();
+  bus.emit('tincan::start');
 });
 
 $(document).on('click', '#complete', function(){
-  tincan.complete().tap(console.log).drain();
+  bus.emit('tincan::complete');
 });
 
 $(document).on('click', '#access-section', function(){
-  var context = { courseName: config.activity_name, name: config.activity_name, type: 'access_section' };
-  tincan.accessSection(context).tap(console.log).drain();
+  bus.emit('tincan::access_section', { courseName: config.activity_name, name: config.activity_name, type: 'access_section' });
 });
 
 $(document).on('click', '#leave-section', function(){
-  var context = { courseName: config.activity_name, name: config.activity_name, type: 'leave_section' };
-  tincan.leaveSection(context).tap(console.log).drain();
+  bus.emit('tincan::leave_section', { courseName: config.activity_name, name: config.activity_name, type: 'leave_section' });
 });
 
 $(document).on('click', '#update-progress', function(){
-  var newState = {};
-  tincan.storeAttemptState({ completionState: newState }).tap(console.log).drain();
-});
-
-$(document).on('click', '#poll-response', function(){
-  var response = { identifier: 'Poll 1', type: 'radio', question: 'Who is there?', response: 'Me' };
-  tincan.setPollResponse(response).tap(console.log).drain();
-});
-
-$(document).on('click', '#get-poll-response', function(){
-  var identifier = 'Poll 1';
-  tincan.getPollResponseData({ identifier }).tap(console.log).drain();
-});
-
-$(document).on('click', '#get-poll-responses', function(){
-  var identifier = 'Poll 1';
-  tincan.getPollResponsesData({ identifier }).tap(console.log).drain();
+  bus.emit('tincan::storeAttemptState', { completionState: {} });
 });

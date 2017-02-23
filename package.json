@@ -30,7 +30,6 @@
     ]
   },
   "dependencies": {
-    "partybus": "git+ssh://git@github.com/phoenix-scitent/partybus.git#latest",
     "babel-preset-es2015": "^6.22.0",
     "babelify": "^7.3.0",
     "browserify": "^14.0.0",
@@ -40,6 +39,8 @@
     "gulp-util": "^3.0.8",
     "jquery": "^3.1.1",
     "most": "^1.2.1",
+    "most-subject": "^5.3.0",
+    "partybus": "git+ssh://git@github.com/phoenix-scitent/partybus.git#latest",
     "ramda": "^0.23.0",
     "tincanjs": "^0.50.0",
     "vinyl-buffer": "^1.0.0",
