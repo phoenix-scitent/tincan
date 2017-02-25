@@ -1,4 +1,15 @@
 import $ from 'jquery';
+import { bus } from 'partybus';
+
+//////////////////////////////////////////////////
+// activity.js (hucklebuck) progress statements //
+//////////////////////////////////////////////////
+
+bus.on('tincan::ready', function(){
+  bus.emit('tincan::start');
+  bus.emit('tincan::storeAttemptState', { completionState: {} });
+  bus.emit('tincan::complete');
+});
 
 // SET global via hucklebuck \\
 
@@ -34,14 +45,14 @@ import tincanInit from './src/tincan';
 // test real use //
 ///////////////////
 
-//var tincan = tincanInit(config, isLocal);
+var tincan = tincanInit(config, isLocal);
 
 //////////////////////////////
 // test demo/production use //
 //////////////////////////////
 
-var authUrl = 'https://17515-presscdn-0-77-pagely.netdna-ssl.com/wp-content/uploads/grassblade/6896-course-3/index.html?actor=%7B%22mbox%22%3A%22mailto%3Atjohnson%40scitent.us%22%2C%22name%22%3A%22Tim%20Johnson%22%2C%22objectType%22%3A%22Agent%22%7D&auth=Basic%20MzctMzRiOTNjYWI2MTc0MmUwOmRjOThhYjFjN2U3NDRmZTE4NGRkYzU4N2U%3D&endpoint=https%3A%2F%2Flrs.scitent.us%2FxAPI%2F&registration=&activity_id=http%3A%2F%2Fcareerdevelopment.aaas.org%2Fcourse3';
-var tincan = tincanInit(config, false, authUrl);
+//var authUrl = 'https://17515-presscdn-0-77-pagely.netdna-ssl.com/wp-content/uploads/grassblade/6896-course-3/index.html?actor=%7B%22mbox%22%3A%22mailto%3Atjohnson%40scitent.us%22%2C%22name%22%3A%22Tim%20Johnson%22%2C%22objectType%22%3A%22Agent%22%7D&auth=Basic%20MzctMzRiOTNjYWI2MTc0MmUwOmRjOThhYjFjN2U3NDRmZTE4NGRkYzU4N2U%3D&endpoint=https%3A%2F%2Flrs.scitent.us%2FxAPI%2F&registration=&activity_id=http%3A%2F%2Fcareerdevelopment.aaas.org%2Fcourse3';
+//var tincan = tincanInit(config, false, authUrl);
 
 // EXAMPLES:
 

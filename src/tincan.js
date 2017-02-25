@@ -1,5 +1,6 @@
 import $ from 'jquery'; // TODO: need to get rid of this after fixing resume progress
 import { timer, slugify } from './helpers';
+import { bus } from 'partybus';
 import * as most from 'most';
 import { async } from 'most-subject';
 import TinCan from 'tincanjs';
@@ -767,10 +768,10 @@ export default function(CONFIG, isLocal, authUrl){
   /////////
 
   const local = function(methodString){
-    return () => most.just({ [methodString]: arguments });
+    return (params) => most.just({ [methodString]: params }).tap(console.log);
   };
 
-  return {
+  const api = {
     start: isLocal ? local('☂ doStart') : doStart,
     storeAttemptState: isLocal ? local('☂ storeAttemptState') : storeAttemptState,
     complete: isLocal ? local('☂ doComplete:') : doComplete,
@@ -784,6 +785,14 @@ export default function(CONFIG, isLocal, authUrl){
     setPollResponse: isLocal ? local('☂ setPollResponse') : setPollResponse,
     getPollResponseData: isLocal ? local('☂ getPollResponseData') : getPollResponseData,
     getPollResponsesData: isLocal ? local('☂ getPollResponsesData') : getPollResponsesData
-  }
+  };
+
+  bus.on('tincan::start', () => { api.start().drain(); });
+  bus.on('tincan::storeAttemptState', (params) => { api.storeAttemptState(params).drain() });
+  bus.on('tincan::complete', () => { api.complete().drain() });
+
+  bus.emit('tincan::ready');
+
+  return api;
 
 };
