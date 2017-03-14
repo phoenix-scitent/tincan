@@ -857,10 +857,10 @@ export default function(CONFIG, isLocal, authUrl){
 
       var recentStatement = R.head(statements);
 
-      var id = R.pathOr(null, ['context', 'extensions', actionPlanIdExtension], recentStatement);
+      //var id = R.pathOr(null, ['context', 'extensions', actionPlanIdExtension], recentStatement);
       var body = R.pathOr({}, ['context', 'extensions', actionPlanResponsesExtension], recentStatement);
 
-      subject.next(id ? { [id]: body }: {}).complete();
+      subject.next(body).complete();
 
     };
 
