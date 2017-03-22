@@ -96,6 +96,7 @@ export default function(CONFIG, isLocal, authUrl){
   //// https://github.com/RusticiSoftware/TinCanJS                                                             ////
   //// http://rusticisoftware.github.io/TinCanJS                                                               ////
   //// http://rusticisoftware.github.io/TinCanJS/doc/api/latest/classes/TinCan.LRS.html#method_queryStatements ////
+  //// http://developer.pearson.com/blog/retrieving-xapi-statements-lrs                                        ////
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
