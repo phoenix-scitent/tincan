@@ -55,8 +55,9 @@ import tincanInit from './src/tincan';
 var email = 'xftohnson';
 var firstName = 'Gim';
 var lastName = 'Tohnson';
+var activity = 'http%3A%2F%2Fcareerdevelopment.aaas.org%2Fcourse3';
 
-var authUrl = `https://17515-presscdn-0-77-pagely.netdna-ssl.com/wp-content/uploads/grassblade/6896-course-3/index.html?actor=%7B%22mbox%22%3A%22mailto%3A${email}%40scitent.us%22%2C%22name%22%3A%22${firstName}%20${lastName}%22%2C%22objectType%22%3A%22Agent%22%7D&auth=Basic%20MzctMzRiOTNjYWI2MTc0MmUwOmRjOThhYjFjN2U3NDRmZTE4NGRkYzU4N2U%3D&endpoint=https%3A%2F%2Flrs.scitent.us%2FxAPI%2F&registration=&activity_id=http%3A%2F%2Fcareerdevelopment.aaas.org%2Fcourse3`;
+var authUrl = `https://17515-presscdn-0-77-pagely.netdna-ssl.com/wp-content/uploads/grassblade/6896-course-3/index.html?actor=%7B%22mbox%22%3A%22mailto%3A${email}%40scitent.us%22%2C%22name%22%3A%22${firstName}%20${lastName}%22%2C%22objectType%22%3A%22Agent%22%7D&auth=Basic%20MzctMzRiOTNjYWI2MTc0MmUwOmRjOThhYjFjN2U3NDRmZTE4NGRkYzU4N2U%3D&endpoint=https%3A%2F%2Flrs.scitent.us%2FxAPI%2F&registration=&activity_id=${activity}`;
 var tincan = tincanInit(config, false, authUrl);
 
 ///////////////
