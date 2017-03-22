@@ -840,7 +840,7 @@ export default function(CONFIG, isLocal, authUrl){
 
     //TODO: extract AJAX into function that takes params and builds query string like `tincan.getStatements`...
 
-    var query = '?activity=' + tincan.activity.id + '&verb=' + actionPlanVerb;
+    var query = '?agent=' + encodeURI(JSON.stringify(tincan.actor)) + '&verb=' + actionPlanVerb;
 
     var handleActionplanData = function(result){
       var actionplanId = identifier;
