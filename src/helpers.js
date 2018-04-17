@@ -63,6 +63,15 @@ var timer = (function(){
       } else {
         // noop
       }
+    },
+    elapsed: function(namespace) {
+      var existingTimer = timers[namespace];
+      if(existingTimer){
+        var time = existingTimer.stop();
+        return time;
+      } else {
+        // noop
+      }      
     }
   }
 
