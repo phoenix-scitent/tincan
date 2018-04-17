@@ -5,92 +5,11 @@ import R from 'ramda';
 import * as most from 'most';
 import { async } from 'most-subject';
 import TinCan from 'tincanjs';
+import getActivity from './activity';
 
-export default function(CONFIG, isLocal, authUrl){
+export default function(activity_config, isLocal, authUrl){
 
-  // ActivityID that is sent for the statement's object
-  const TC_COURSE_ID = CONFIG.full_url;
-
-  // CourseName for the activity
-  const TC_COURSE_NAME = { "en-US": CONFIG.activity_name };
-
-  // CourseDesc for the activity
-  const TC_COURSE_DESC = { "en-US": CONFIG.activity_name };
-
-  // Pre-configured LRSes that should receive data, added to what is included
-  // in the URL and/or passed to the constructor function.
-  //
-  // An array of objects where each object may have the following properties:
-  //
-  //    endpoint: (including trailing slash '/')
-  //    auth:
-  //    allowFail: (boolean, default true)
-  //
-  // TC_RECORD_STORES = [
-  //   {
-  //     endpoint: "https://cloud.scorm.com/ScormEngineInterface/TCAPI/public/",
-  //     auth:     "Basic VGVzdFVzZXI6cGFzc3dvcmQ="
-  //   }
-  // ];
-
-  const Tincan = {};
-
-  Tincan.CourseActivity = {
-    id: TC_COURSE_ID,
-    definition: {
-      type: "http://adlnet.gov/expapi/activities/course",
-      name: TC_COURSE_NAME,
-      description: TC_COURSE_DESC
-    }
-  };
-
-  Tincan.getContext = function (parentActivityId, isAssessment) {
-    //isAssessment = typeof isAssessment !== 'undefined' ? isAssessment : false;
-    //var ctx = {
-    //  contextActivities: {
-    //    grouping: [
-    //      {
-    //        id: Tincan.CourseActivity.id
-    //      },
-    //      {
-    //        id: "http://id.tincanapi.com/activity/tincan-prototypes"
-    //      }
-    //    ],
-    //    category: [
-    //      {
-    //        id: "http://id.tincanapi.com/recipe/tincan-prototypes/golf/1",
-    //        definition: {
-    //          type: "http://id.tincanapi.com/activitytype/recipe"
-    //        }
-    //      },
-    //      {
-    //        id: "http://id.tincanapi.com/activity/tincan-prototypes/elearning",
-    //        definition: {
-    //          type: "http://id.tincanapi.com/activitytype/source",
-    //          name: {
-    //            "en-US": "E-learning course"
-    //          },
-    //          description: {
-    //            "en-US": "An e-learning course built using the golf prototype framework."
-    //          }
-    //        }
-    //      }
-    //    ]
-    //  }
-    //};
-    //if (parentActivityId !== undefined && parentActivityId !== null) {
-    //  ctx.contextActivities.parent = {
-    //    id: parentActivityId
-    //  };
-    //}
-    //if (isAssessment) {
-    //  ctx.contextActivities.grouping.push({
-    //    id: Tincan.CourseActivity.id + "/GolfAssessment"
-    //  });
-    //}
-    var ctx = {};
-    return ctx;
-  };
+  const Activity = getActivity(activity_config);
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //// https://github.com/RusticiSoftware/TinCanJS                                                             ////
@@ -102,7 +21,7 @@ export default function(CONFIG, isLocal, authUrl){
 
   var tincan = new TinCan({
     url: authUrl || window.location.href,
-    activity: Tincan.CourseActivity
+    activity: Activity
   });
 
   var BookmarkingTracking = function () {
@@ -121,7 +40,7 @@ export default function(CONFIG, isLocal, authUrl){
       // this.getCompletion(bookmark.attemptComplete);
       if (bookmark && bookmark.completionState) {
         this.completionState = bookmark.completionState;
-        $(document).trigger('resumeProgress', [this.completionState])
+        bus.emit('resumeProgress', this.completionState);
       }
     },
     reset: function () {
@@ -216,7 +135,7 @@ export default function(CONFIG, isLocal, authUrl){
           "en-US": "initialized"
         }
       },
-      context: Tincan.getContext(),
+      context: Activity.getContext(),
       result: {
         duration: "PT0S"
       }
@@ -229,7 +148,7 @@ export default function(CONFIG, isLocal, authUrl){
           "en-US": "attempted"
         }
       },
-      context: Tincan.getContext(),
+      context: Activity.getContext(),
       result: {
         duration: "PT0S"
       }
@@ -257,7 +176,7 @@ export default function(CONFIG, isLocal, authUrl){
                     "en-US": "resumed"
                   }
                 },
-                context: Tincan.getContext(),
+                context: Activity.getContext(),
                 result: {
                   duration: TinCan.Utils.convertMillisecondsToISO8601Duration(bookmark.attemptDuration)
                 }
@@ -313,7 +232,7 @@ export default function(CONFIG, isLocal, authUrl){
           "en-US": "completed"
         }
       },
-      context: Tincan.getContext(),
+      context: Activity.getContext(),
       result: {
         completion: true,
         success: true,
@@ -349,7 +268,7 @@ export default function(CONFIG, isLocal, authUrl){
     var createObject = function (info) {
       if (type === 'access_course') {
         return {
-          "id": TC_COURSE_ID,
+          "id": Activity.id,
           "objectType": "Activity",
           "definition": {
             "name": {"en-US": info.name},
@@ -370,7 +289,7 @@ export default function(CONFIG, isLocal, authUrl){
 
       if (type === 'leave_course') {
         return {
-          "id": TC_COURSE_ID,
+          "id": Activity.id,
           "objectType": "Activity",
           "definition": {
             "name": {"en-US": info.name},
@@ -392,7 +311,7 @@ export default function(CONFIG, isLocal, authUrl){
 
       if (type === 'access_section') {
         return {
-          "id": TC_COURSE_ID,
+          "id": Activity.id,
           "objectType": "Activity",
           "definition": {
             "name": {"en-US": info.name},
@@ -413,7 +332,7 @@ export default function(CONFIG, isLocal, authUrl){
 
       if (type === 'leave_section') {
         return {
-          "id": TC_COURSE_ID,
+          "id": Activity.id,
           "objectType": "Activity",
           "definition": {
             "name": {"en-US": info.name},
@@ -438,7 +357,7 @@ export default function(CONFIG, isLocal, authUrl){
 
       if (type === 'start_video') {
         return {
-          "id": TC_COURSE_ID,
+          "id": Activity.id,
           "objectType": "Activity",
           "definition": {
             "name": {"en-US": (info.section + ' - ' + info.src)},
@@ -460,7 +379,7 @@ export default function(CONFIG, isLocal, authUrl){
 
       if (type === 'end_video') {
         return {
-          "id": TC_COURSE_ID,
+          "id": Activity.id,
           "objectType": "Activity",
           "definition": {
             "name": {"en-US": (info.section + ' - ' + info.src)},
@@ -486,7 +405,7 @@ export default function(CONFIG, isLocal, authUrl){
 
       if (type === 'access_help') {
         return {
-          "id": TC_COURSE_ID,
+          "id": Activity.id,
           "objectType": "Activity",
           "definition": {
             "name": "help button",
@@ -546,7 +465,7 @@ export default function(CONFIG, isLocal, authUrl){
       },
       result: createResult(info),
       object: createObject(info),
-      context: Tincan.getContext()
+      context: Activity.getContext()
     };
 
     statements.push(interactionStatement);
@@ -654,11 +573,11 @@ export default function(CONFIG, isLocal, authUrl){
 
     var createObject = function () {
       return {
-        "id": TC_COURSE_ID,
+        "id": Activity.id,
         "objectType": "Activity",
         "definition": {
           "name": {"en-US": question},
-          "description": {"en-US": TC_COURSE_NAME["en-US"]},
+          "description": {"en-US": Activity.definition.name},
           "type": pollIdExtension + '/' + type
         },
         "name": identifier
@@ -789,11 +708,11 @@ export default function(CONFIG, isLocal, authUrl){
 
     var createObject = function () {
       return {
-        "id": TC_COURSE_ID,
+        "id": Activity.id,
         "objectType": "Activity",
         "definition": {
           "name": {"en-US": identifier },
-          "description": {"en-US": TC_COURSE_NAME["en-US"]},
+          "description": {"en-US": Activity.definition.name},
           "type": actionPlanIdExtension
         },
         "name": identifier
