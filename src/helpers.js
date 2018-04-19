@@ -51,14 +51,17 @@ var timer = (function(){
         // noop
       } else {
         timers[namespace] = _timer.create();
-        return timers[namespace].start();
+        var time = timers[namespace].start()
+        console.log("⏱ timer started", namespace, time);
+        return time;
       }
     },
     stop: function(namespace){
       var existingTimer = timers[namespace];
       if(existingTimer){
         var time = existingTimer.stop();
-        delete timers[namespace];
+        console.log("⏰ timer stopped", namespace, time);
+        // delete timers[namespace];
         return time;
       } else {
         // noop

@@ -8,7 +8,7 @@ import TinCan from 'tincanjs';
 import getActivity from './activity';
 // import bookmarking from './bookmarking';
 
-export default function(activity_config, isLocal, authUrl){
+export default function(activity_config, send_for_real, authUrl){
 
   const Activity = getActivity(activity_config);
 
@@ -18,8 +18,12 @@ export default function(activity_config, isLocal, authUrl){
   });
 
   const pushToLRS = (statements, cb) => {
-    console.log("Sending Statements to the LRS", statements);
-    tincan.sendStatements(statements, cb);
+    if (!send_for_real) {
+      console.log("LRS Statements... not sending", statements);
+    } else {
+      console.log("Sending Statements to the LRS", statements);
+      tincan.sendStatements(statements, cb);      
+    }
   };
 
 
@@ -82,6 +86,7 @@ export default function(activity_config, isLocal, authUrl){
 
     var statements = [];
     var end = timer.stop(Activity.id);
+    console.log(end, Activity.id);
 
     var completedStatement = {
       verb: {
@@ -310,9 +315,9 @@ export default function(activity_config, isLocal, authUrl){
   };
 
   const api = {
-    start: isLocal ? locallog('☂ doStart') : doStart,
-    complete: isLocal ? locallog('☂ doComplete:') : doComplete,
-    track: isLocal ? locallog('☂ doTracking:') : doTracking
+    start: doStart,
+    complete: doComplete,
+    track: doTracking
   };
 
   bus.on('tincan::start', () => { api.start().drain(); });
