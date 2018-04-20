@@ -1,5 +1,4 @@
-tincan.js
-api.js
+tincan.js (getting and setting up the API happens here, sending the API into each event file and the special)
 helpers.js
 activity.js
 events
