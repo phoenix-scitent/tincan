@@ -9,7 +9,6 @@ import doComplete from './events/complete';
 import doTrack from './events/track';
 import doBookmark from './events/bookmark';
 import fetch_bookmark from './events/fetch_bookmark';
-// import bookmarking from './bookmarking';
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //// https://github.com/RusticiSoftware/TinCanJS                                                             ////
