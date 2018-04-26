@@ -8,7 +8,9 @@ import doStart from './events/start';
 import doComplete from './events/complete';
 import doTrack from './events/track';
 import doBookmark from './events/bookmark';
+import storeSections from './events/sections';
 import fetch_bookmark from './events/fetch_bookmark';
+import fetch_sections from './events/fetch_sections';
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //// https://github.com/RusticiSoftware/TinCanJS                                                             ////
@@ -56,8 +58,10 @@ export default (activity_config, send_for_real, authUrl) => {
   bus.on('tincan::complete', () => { doComplete(send_statements_to_LRS, Activity).drain() });
   bus.on('tincan::track', (wut) => { doTrack(send_statements_to_LRS, Activity, wut).drain(); });
   bus.on('tincan::bookmark', (slug) => { doBookmark(setState_to_LRS, Activity, slug).drain(); });
+  bus.on('tincan::sections', (sections) => { storeSections(setState_to_LRS, Activity, sections).drain(); });
   bus.emit('tincan::ready');
   bus.emit('tincan::fetch_bookmark', xAPI);
+  bus.emit('tincan::fetch_sections', xAPI);
 
   return xAPI;
 };
