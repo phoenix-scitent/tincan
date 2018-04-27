@@ -9,7 +9,7 @@ const fetch_sections = function(xAPI){
     callback: function(err, result){
       if (err === null && result !== null && result.contents.sections !== '') {
         console.log("Section Data Found", result.contents.sections, err, result);
-        bus.emit('tincan::state::found', result.contents.sections);
+        bus.emit('tincan::sections::restore', result.contents.sections);
       } else {
         console.log("Section Data not found", result, err);
       }

@@ -11,6 +11,7 @@ const storeSections = function(pushToLRS, Activity, sections){
 
   let section_state = {
     sections: sections,
+    activity_id: Activity.id,
     attempt_duration: Math.round((now - start_activity_timer) / 1000)
   };
 
