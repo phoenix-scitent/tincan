@@ -5,7 +5,7 @@ import { async } from 'most-subject';
 import TinCan from 'tincanjs';
 import getActivity from './activity';
 import doStart from './events/start';
-import doComplete from './events/complete';
+import { doComplete } from './events/complete';
 import doTrack from './events/track';
 import doBookmark from './events/bookmark';
 import storeSections from './events/sections';
@@ -62,6 +62,7 @@ export default (activity_config, send_for_real, authUrl) => {
   bus.emit('tincan::ready');
   bus.emit('tincan::fetch_bookmark', xAPI);
   bus.emit('tincan::fetch_sections', xAPI);
+  bus.emit('tincan::fetch_completed', xAPI);
 
   return xAPI;
 };
